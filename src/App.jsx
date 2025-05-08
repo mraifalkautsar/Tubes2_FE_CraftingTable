@@ -1,35 +1,62 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from 'react';
+import SearchWindow from './SearchWindow.jsx';
+import RecipeTree from './Tree.jsx';
+
+// sample data JSON sesuai struktur yang kamu punya
+const sampleTreeData = {
+  name: 'Brick',
+  recipes: [
+    {
+      inputs: [
+        {
+          name: 'Clay',
+          recipes: [
+            {
+              inputs: [
+                {
+                  
+                  name: 'Mud',
+                  recipes: [
+                    { inputs: [{ name: 'Water' }, { name: 'Earth' }] },
+                  ],
+                },
+                { name: 'Sand' },
+              ],
+            },
+          ],
+        },
+        { name: 'Stone' },
+      ],
+    },
+    {
+      inputs: [
+        {
+          name: 'Mud',
+          recipes: [
+            { inputs: [{ name: 'Water' }, { name: 'Earth' }] },
+          ],
+        },
+        { name: 'Fire' },
+      ],
+    },
+  ],
+};
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [showTree, setShowTree] = useState(false);
+
+  const handleSearch = params => {
+    // nanti di sini fetch dari backend
+    console.log('Search!', params);
+    setShowTree(true);
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="App">
+      {!showTree && <SearchWindow onSearch={handleSearch} />}
+      {showTree && <RecipeTree data={sampleTreeData} />}
+    </div>
+  );
 }
 
-export default App
+export default App;

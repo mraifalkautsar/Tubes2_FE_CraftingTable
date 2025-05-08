@@ -1,0 +1,152 @@
+/* backdrop */
+.overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    color: #333
+  }
+  
+  /* the pop-up panel */
+  .modal {
+    background: #d8d8d8;
+    border-radius: 10px;
+    display: flex;
+    padding: 20px;
+    width: 800px;
+    max-width: 90%;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  }
+  
+  /* left side grid */
+  .grid-wrapper {
+    background: #999;
+    border-radius: 6px;
+    padding: 10px;
+    flex: 1;
+    max-height: 360px;
+    overflow-y: auto;
+    margin-right: 20px;
+  }
+  
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-gap: 10px;
+  }
+  
+  .grid-item {
+    background: #ccc;
+    border-radius: 4px;
+    padding: 8px;
+    cursor: pointer;
+    transition: transform 0.1s;
+  }
+  
+  .grid-item:hover {
+    transform: scale(1.05);
+  }
+  
+  .grid-item.selected {
+    outline: 3px solid #4CAF50;
+  }
+  
+  .grid-item img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  
+  /* right side controls */
+  .controls {
+    width: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .selected-preview {
+    align-items: center;
+  }
+  
+  .label {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #333;
+  }
+  
+  .preview-box {
+    width: 100px;
+    height: 100px;
+    background: #888;
+    margin: 8px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .preview-box img {
+    max-width: 80%;
+    max-height: 80%;
+  }
+  
+  .item-name {
+    text-align: center;
+    font-weight: bold;
+  }
+  
+  /* radio list */
+  .radio-group {
+    margin: 16px 0;
+  }
+  
+  .radio-group label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+  }
+  
+  .radio-group input {
+    margin-right: 8px;
+  }
+  
+  /* recipes input */
+  .recipes-input {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+  }
+  
+  .recipes-input label {
+    margin-bottom: 4px;
+    font-size: 0.9rem;
+  }
+  
+  .recipes-input input {
+    width: 60px;
+    padding: 4px;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+  }
+  
+  /* search button */
+  .search-button {
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    background: #666;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  
+  .search-button:hover {
+    background: #555;
+  }
+  

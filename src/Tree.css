@@ -1,0 +1,56 @@
+/* Tree.css */
+
+/* ---------------------------------------
+   Buat agar tree‐container memenuhi seluruh viewport
+   dan memberi scrollbar jika kontennya lebih besar
+   --------------------------------------- */
+   html,
+   body,
+   #root,
+   .App {
+     margin: 0;
+     padding: 0;
+     height: 100%;
+   }
+
+   .tree-container {
+     width: 100%;
+     height: 100%;   /* penuh */
+     overflow: auto; /* tampilkan scroll jika perlu */
+   }
+   
+   /* Styling default node‐label */
+   .rd3t-node text {
+     font-size: 12px;
+     fill: white;
+   }
+   
+   .rd3t-leaf-node text {
+    font-size: 12px;
+    fill: white;
+  }
+
+      /* parent (branch) nodes */
+    .rd3t-node > circle {
+      /* SVG “r” attribute can be overridden in CSS */
+      r: 15px !important;          /* new radius */
+      fill: #fff !important;       /* background */
+      stroke: #000 !important;     /* border color */
+      stroke-width: 2px !important;
+    }
+
+    /* leaf nodes (no children) */
+    .rd3t-leaf-node > circle {
+      r: 15px !important;
+      fill: #eee !important;
+      stroke: #444 !important;
+      stroke-width: 1px !important;
+    }
+
+    /* your dummy‐recipe nodes, if you still want to style them */
+    .dummy-node > circle {
+      r: 0 !important;
+      fill: #eee !important;
+      fill: transparent !important;
+      stroke: transparent !important;
+    }
