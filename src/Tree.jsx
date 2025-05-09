@@ -1,84 +1,92 @@
-import React, { useMemo, useRef, useState, useEffect } from 'react';
+import React, { useMemo, useRef, useState, useLayoutEffect } from 'react';
 import Tree from 'react-d3-tree';
 import './Tree.css';
 
 /**
- * Rekursif konversi data recipe Golang ke format react-d3-tree
- * Setiap `recipes` jadi satu dummy node (name: '') dengan children = inputs
+ * Convert dari NodeDTO: 
+ *  { name, image_url, children: [ [NodeDTO...] , ... ] }
+ * ke format react-d3-tree:
+ *  { name, image, children: [...] }
  */
-function convertTree(node) {
-  const treeNode = { name: node.name };
-  if (node.recipes?.length) {
-    treeNode.children = node.recipes.map(recipe => ({
-      name: '',                 // dummy marker
-      children: recipe.inputs.map(convertTree),
+function convertDTO(node) {
+  // derive local SVG path from name
+  const fileName = node.name.replace(/ /g, '_') + '.svg';
+  const treeNode = {
+    name:  node.name,
+    image: node.name ? `/images/${fileName}` : null,
+  };
+  if (Array.isArray(node.children) && node.children.length > 0) {
+    treeNode.children = node.children.map(group => ({
+      name: '',      // dummy grouping node
+      image: null,
+      children: group.map(convertDTO),
     }));
   }
   return treeNode;
 }
 
 export default function RecipeTree({ data }) {
-  const treeData = useMemo(() => convertTree(data), [data]);
+  // wrap root dalam array
+  const treeData = useMemo(() => [convertDTO(data)], [data]);
+
+  // untuk auto‐center
   const containerRef = useRef(null);
   const [translate, setTranslate] = useState({ x: 0, y: 0 });
+  const [ready, setReady] = useState(false);
 
-  useEffect(() => {
-    if (containerRef.current) {
-      const { width } = containerRef.current.getBoundingClientRect();
-      setTranslate({ x: width / 2, y: 50 });
-    }
+  useLayoutEffect(() => {
+    if (!containerRef.current) return;
+    const { width } = containerRef.current.getBoundingClientRect();
+    setTranslate({ x: width / 2, y: 60 });
+    setReady(true);
   }, []);
+
+  // custom render tiap node: icon + border + label
+  const renderNode = ({ nodeDatum, toggleNode, transform }) => {
+    const isDummy = nodeDatum.name === '';
+    return (
+      <g transform={transform} onClick={toggleNode}>
+        {/* icon */}
+        {!isDummy && nodeDatum.image && (
+          <image
+            href={nodeDatum.image}
+            x={-20} y={-20}
+            width={40} height={40}
+          />
+        )}
+        {/* border circle */}
+        {!isDummy && (
+          <circle
+            r={22}
+            fill="none"
+            stroke="#888"
+            strokeWidth={2}
+          />
+        )}
+        {/* label di bawah */}
+        {!isDummy && (
+          <text textAnchor="middle" y={35} className="node-label">
+            {nodeDatum.name}
+          </text>
+        )}
+      </g>
+    );
+  };
 
   return (
     <div className="tree-container" ref={containerRef}>
-      {translate.x > 0 && (
+      {ready && (
         <Tree
           data={treeData}
           translate={translate}
           orientation="vertical"
           pathFunc="straight"
-          styles={{
-            links: { stroke: '#888' },
-            nodes: {
-              node: { circle: { r: 15, fill: '#fff', stroke: '#000' } },
-              leafNode: { circle: { r: 10, fill: '#eee', stroke: '#444' } },
-            },
-          }}
-          nodeSvgShape={{ shape: 'circle', shapeProps: {} }}
-
-          /* render custom node to tag or hide dummy nodes */
-          renderCustomNodeElement={rd3tProps => {
-            const { nodeDatum, toggleNode, transform } = rd3tProps;
-            const isDummy = nodeDatum.name === '';
-            return (
-              <g
-                transform={transform}
-                onClick={toggleNode}
-                className={isDummy ? 'dummy-node' : undefined}
-              >
-                <circle
-                  r={isDummy ? 0 : 15}
-                  fill={isDummy ? 'transparent' : '#fff'}
-                  stroke={isDummy ? 'transparent' : '#000'}
-                />
-                {!isDummy && (
-                  <g className="rd3t-label">
-                    <text
-                      className="rd3t-label__title"
-                      textAnchor="start"
-                      x={20}
-                      dy={4}
-                    >
-                      {nodeDatum.name}
-                    </text>
-                  </g>
-                )}
-              </g>
-            );
-          }}
-
-          enableLegacyTransitions={false}
+          renderCustomNodeElement={renderNode}
           collapsible={false}
+          enableLegacyTransitions={false}
+          zoomable={false}
+          separation={{ siblings: 1.5, nonSiblings: 2 }}
+          styles={{ links: { stroke: '#888', strokeWidth: 2 } }}
         />
       )}
     </div>
