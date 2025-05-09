@@ -1,35 +1,33 @@
-import React, { useMemo, useRef, useState, useLayoutEffect } from 'react';
-import Tree from 'react-d3-tree';
-import './Tree.css';
+// src/Tree.jsx
+import React, { useMemo, useRef, useState, useLayoutEffect } from "react";
+import Tree from "react-d3-tree";
+import "./Tree.css";
 
-/**
- * Convert dari NodeDTO: 
- *  { name, image_url, children: [ [NodeDTO...] , ... ] }
- * ke format react-d3-tree:
- *  { name, image, children: [...] }
- */
 function convertDTO(node) {
-  // derive local SVG path from name
-  const fileName = node.name.replace(/ /g, '_') + '.svg';
-  const treeNode = {
-    name:  node.name,
+  const fileName = node.name.replace(/ /g, "_") + ".svg";
+  return {
+    name: node.name,
     image: node.name ? `/images/${fileName}` : null,
+    children:
+      Array.isArray(node.recipes) && node.recipes.length
+        ? node.recipes.map((recipe) => ({
+            name: "",
+            image: null,
+            children: recipe.inputs.map(convertDTO),
+          }))
+        : undefined,
   };
-  if (Array.isArray(node.children) && node.children.length > 0) {
-    treeNode.children = node.children.map(group => ({
-      name: '',      // dummy grouping node
-      image: null,
-      children: group.map(convertDTO),
-    }));
-  }
-  return treeNode;
 }
 
-export default function RecipeTree({ data }) {
-  // wrap root dalam array
+export default function RecipeTree({
+  data,
+  timeTaken,
+  nodesVisited,
+  recipesFound,
+  methodUsed,
+  onBack,
+}) {
   const treeData = useMemo(() => [convertDTO(data)], [data]);
-
-  // untuk auto‐center
   const containerRef = useRef(null);
   const [translate, setTranslate] = useState({ x: 0, y: 0 });
   const [ready, setReady] = useState(false);
@@ -41,34 +39,33 @@ export default function RecipeTree({ data }) {
     setReady(true);
   }, []);
 
-  // custom render tiap node: icon + border + label
-  const renderNode = ({ nodeDatum, toggleNode, transform }) => {
-    const isDummy = nodeDatum.name === '';
+  const renderNode = ({ nodeDatum, transform }) => {
+    const isDummy = nodeDatum.name === "";
+    const cls = isDummy
+      ? "dummy-node"
+      : nodeDatum.children
+      ? "branch-node"
+      : "leaf-node";
+
     return (
-      <g transform={transform} onClick={toggleNode}>
+      <g className={cls} transform={transform}>
         {/* icon */}
         {!isDummy && nodeDatum.image && (
-          <image
-            href={nodeDatum.image}
-            x={-20} y={-20}
-            width={40} height={40}
+          <image className="node-icon" href={nodeDatum.image} />
+        )}
+        {/* circle; CSS will size & color it */}
+        {/* square; CSS will size & color it */}
+        {!isDummy && (
+          <rect
+            className="node-rect"
+            x={-26} /* half of width */
+            y={-26} /* half of height */
+            width={52}
+            height={52}
           />
         )}
-        {/* border circle */}
-        {!isDummy && (
-          <circle
-            r={22}
-            fill="none"
-            stroke="#888"
-            strokeWidth={2}
-          />
-        )}
-        {/* label di bawah */}
-        {!isDummy && (
-          <text textAnchor="middle" y={35} className="node-label">
-            {nodeDatum.name}
-          </text>
-        )}
+        {/* label */}
+        {!isDummy && <text className="node-label">{nodeDatum.name}</text>}
       </g>
     );
   };
@@ -76,19 +73,51 @@ export default function RecipeTree({ data }) {
   return (
     <div className="tree-container" ref={containerRef}>
       {ready && (
-        <Tree
-          data={treeData}
-          translate={translate}
-          orientation="vertical"
-          pathFunc="straight"
-          renderCustomNodeElement={renderNode}
-          collapsible={false}
-          enableLegacyTransitions={false}
-          zoomable={false}
-          separation={{ siblings: 1.5, nonSiblings: 2 }}
-          styles={{ links: { stroke: '#888', strokeWidth: 2 } }}
-        />
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            transform: "rotate(180deg)", // flip the whole tree
+          }}
+        >
+          <Tree
+            data={treeData}
+            translate={translate}
+            orientation="vertical"
+            pathFunc="straight"
+            renderCustomNodeElement={renderNode}
+            collapsible={false}
+            enableLegacyTransitions={false}
+            zoomable={true}
+            zoom={1}
+            scaleExtent={{ min: 0.5, max: 2 }}
+            separation={{ siblings: 1.5, nonSiblings: 2 }}
+            rootOrientation="bottom"
+            /* no inline styles here! */
+          />
+        </div>
       )}
+
+
+      {/* INFO BOX */}
+      <div className="info-box">
+        <h4>Search Info</h4>
+        <p>
+          <strong>Time taken:</strong> {timeTaken} ms
+        </p>
+        <p>
+          <strong>Nodes visited:</strong> {nodesVisited}
+        </p>
+        <p>
+          <strong>Recipes found:</strong> {recipesFound}
+        </p>
+        <p>
+          <strong>Method used:</strong> {methodUsed}
+        </p>
+        <button className="back-button" onClick={onBack}>
+        ← New Search
+        </button>
+      </div>
     </div>
   );
 }

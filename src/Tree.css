@@ -4,53 +4,110 @@
    Buat agar tree‐container memenuhi seluruh viewport
    dan memberi scrollbar jika kontennya lebih besar
    --------------------------------------- */
-   html,
-   body,
-   #root,
-   .App {
-     margin: 0;
-     padding: 0;
-     height: 100%;
-   }
+html,
+body,
+#root,
+.App {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  transform: rotate(180);
+}
 
-   .tree-container {
-     width: 100%;
-     height: 100%;   /* penuh */
-     overflow: auto; /* tampilkan scroll jika perlu */
-   }
-   
-   /* Styling default node‐label */
-   .rd3t-node text {
-     font-size: 12px;
-     fill: white;
-   }
-   
-   .rd3t-leaf-node text {
-    font-size: 12px;
-    fill: white;
-  }
+/* container fills parent */
+.tree-container {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  position: relative;
+}
 
-      /* parent (branch) nodes */
-    .rd3t-node > circle {
-    /* SVG “r” attribute can be overridden in CSS */
-    r: 15px !important;          /* new radius */
-    fill: #444 !important;
-    stroke: #eee !important;
-    stroke-width: 2px !important;
-  }
+/* Dummy grouping nodes should be invisible */
+.dummy-node > circle,
+.dummy-node > text,
+.dummy-node > image {
+  display: none;
+}
 
-    /* leaf nodes (no children) */
-    .rd3t-leaf-node > circle {
-      r: 15px !important;
-      fill: #000 !important;       /* background */
-      stroke: #fff !important;     /* border color */
-      stroke-width: 1px !important;
-  }
+/* Branch nodes (have children) */
+.branch-node > rect.node-rect {
+  r: 26;
+  fill: none;
+  stroke: #888;
+  stroke-width: 2px;
+}
 
-    /* your dummy‐recipe nodes, if you still want to style them */
-    .dummy-node > circle {
-      r: 0 !important;
-      fill: #eee !important;
-      fill: transparent !important;
-      stroke: transparent !important;
-  }
+/* Leaf nodes (no children) */
+.leaf-node > rect.node-rect {
+  r: 26;
+  fill: none;
+  stroke: white;
+  stroke-width: 2px;
+}
+
+/* Icons */
+.node-icon {
+  /* center it on the circle automatically */
+  x: -20px;
+  y: -20px;
+  width: 40px;
+  height: 40px;
+  transform: rotate(180deg);
+}
+
+.rd3t-link {
+  stroke: #d8d8d8 !important;
+  stroke-width: 2px !important;
+}
+
+/* Labels below each node */
+.node-label {
+  font-size: 12px;
+  fill: white !important;
+  outline: 0;
+  stroke: none;
+  dominant-baseline: hanging;
+  text-anchor: middle;
+  transform: translateY(-30px) rotate(180deg); /* circle radius + small gap */
+}
+
+.info-box {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  width: 12rem;
+  background: #333;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  z-index: 10;
+}
+
+.info-box h4 {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+}
+
+.info-box p {
+  margin: 0.25rem 0;
+}
+
+.info-box .back-button {
+  margin-top: 0.5rem;
+  display: block;
+  width: 100%;
+  padding: 0.5rem;
+  background: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+.info-box .back-button:hover {
+  background: #45a049;
+}

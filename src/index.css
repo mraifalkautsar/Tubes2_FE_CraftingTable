@@ -22,7 +22,7 @@ a:hover {
 }
 
 body {
-  background-image: url('./assets/dirt_background.png');
+  background-image: url("./assets/dirt_background.png");
   background-size: cover;
   background-repeat: repeat;
   background-position: center;

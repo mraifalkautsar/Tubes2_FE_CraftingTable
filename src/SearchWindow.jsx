@@ -1,26 +1,26 @@
 // src/SearchWindow.jsx
-import React, { useState, useEffect } from 'react';
-import './SearchWindow.css';
+import React, { useState, useEffect } from "react";
+import "./SearchWindow.css";
 
 export default function SearchWindow({ onSearch }) {
   const [items, setItems] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
-  const [algorithm, setAlgorithm]   = useState('dfs');
+  const [algorithm, setAlgorithm] = useState("dfs");
   const [numRecipes, setNumRecipes] = useState(1);
-  const [searchTerm, setSearchTerm]   = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     // ambil daftar elemen + image_url dari backend
-    fetch('http://localhost:8080/api/recipes')
-      .then(res => {
+    fetch("http://localhost:8080/api/recipes")
+      .then((res) => {
         if (!res.ok) throw new Error(res.statusText);
         return res.json();
       })
-      .then(data => {
+      .then((data) => {
         // data: [{ element, image_url, recipes }, ...]
         const mapped = data.map((el, idx) => {
           // build local path: spaces → underscores
-          const fileName = el.element.replace(/ /g, '_') + '.svg';
+          const fileName = el.element.replace(/ /g, "_") + ".svg";
           return {
             id: idx,
             name: el.element,
@@ -30,15 +30,20 @@ export default function SearchWindow({ onSearch }) {
         setItems(mapped);
         setSelectedItem(mapped[0]);
       })
-      .catch(err => {
-        console.error('Load recipes.json failed:', err);
-        alert('Gagal load daftar elemen dari server');
+      .catch((err) => {
+        console.error("Load recipes.json failed:", err);
+        alert("Gagal load daftar elemen dari server");
       });
   }, []);
 
-  if (!items) return <div className="overlay"><p>Loading elements…</p></div>;
+  if (!items)
+    return (
+      <div className="overlay">
+        <p>Loading elements…</p>
+      </div>
+    );
 
-  const filtered = items.filter(it =>
+  const filtered = items.filter((it) =>
     it.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -52,27 +57,30 @@ export default function SearchWindow({ onSearch }) {
         {/* kiri: grid ikon */}
         <div className="grid-wrapper">
           <div className="grid">
-            {filtered.map(item => (
+            {filtered.map((item) => (
               <div
                 key={item.id}
-                className={`grid-item${item.id === selectedItem.id ? ' selected' : ''}`}
+                className={`grid-item${
+                  item.id === selectedItem.id ? " selected" : ""
+                }`}
                 onClick={() => setSelectedItem(item)}
               >
                 <img src={item.icon} alt={item.name} />
               </div>
             ))}
-              {filtered.length === 0 && <p className="no-results">No elements found</p>}
+            {filtered.length === 0 && (
+              <p className="no-results">No elements found</p>
+            )}
           </div>
         </div>
         {/* kanan: kontrol */}
         <div className="controls">
-
           <div className="search-bar">
             <input
               type="text"
               placeholder="Search elements…"
               value={searchTerm}
-              onChange={e => setSearchTerm(e.target.value)}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
 
@@ -91,8 +99,8 @@ export default function SearchWindow({ onSearch }) {
                 type="radio"
                 name="algorithm"
                 value="dfs"
-                checked={algorithm === 'dfs'}
-                onChange={() => setAlgorithm('dfs')}
+                checked={algorithm === "dfs"}
+                onChange={() => setAlgorithm("dfs")}
               />
               DFS
             </label>
@@ -101,8 +109,8 @@ export default function SearchWindow({ onSearch }) {
                 type="radio"
                 name="algorithm"
                 value="bfs"
-                checked={algorithm === 'bfs'}
-                onChange={() => setAlgorithm('bfs')}
+                checked={algorithm === "bfs"}
+                onChange={() => setAlgorithm("bfs")}
               />
               BFS
             </label>
@@ -111,8 +119,8 @@ export default function SearchWindow({ onSearch }) {
                 type="radio"
                 name="algorithm"
                 value="bidirectional"
-                checked={algorithm === 'bidirectional'}
-                onChange={() => setAlgorithm('bidirectional')}
+                checked={algorithm === "bidirectional"}
+                onChange={() => setAlgorithm("bidirectional")}
               />
               Bidirectional
             </label>
@@ -124,7 +132,7 @@ export default function SearchWindow({ onSearch }) {
               type="number"
               min="1"
               value={numRecipes}
-              onChange={e => setNumRecipes(e.target.value)}
+              onChange={(e) => setNumRecipes(e.target.value)}
             />
           </div>
           <button className="search-button" onClick={handleSearch}>
