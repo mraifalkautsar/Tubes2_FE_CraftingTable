@@ -32,20 +32,20 @@
 
       /* parent (branch) nodes */
     .rd3t-node > circle {
-      /* SVG “r” attribute can be overridden in CSS */
-      r: 15px !important;          /* new radius */
-      fill: #fff !important;       /* background */
-      stroke: #000 !important;     /* border color */
-      stroke-width: 2px !important;
-    }
+    /* SVG “r” attribute can be overridden in CSS */
+    r: 15px !important;          /* new radius */
+    fill: #444 !important;
+    stroke: #eee !important;
+    stroke-width: 2px !important;
+  }
 
     /* leaf nodes (no children) */
     .rd3t-leaf-node > circle {
       r: 15px !important;
-      fill: #eee !important;
-      stroke: #444 !important;
+      fill: #000 !important;       /* background */
+      stroke: #fff !important;     /* border color */
       stroke-width: 1px !important;
-    }
+  }
 
     /* your dummy‐recipe nodes, if you still want to style them */
     .dummy-node > circle {
@@ -53,4 +53,4 @@
       fill: #eee !important;
       fill: transparent !important;
       stroke: transparent !important;
-    }
+  }

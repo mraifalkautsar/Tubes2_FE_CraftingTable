@@ -1,60 +1,45 @@
+// src/App.jsx
+
 import React, { useState } from 'react';
 import SearchWindow from './SearchWindow.jsx';
 import RecipeTree from './Tree.jsx';
 
 // sample data JSON sesuai struktur yang kamu punya
-const sampleTreeData = {
-  name: 'Brick',
-  recipes: [
-    {
-      inputs: [
-        {
-          name: 'Clay',
-          recipes: [
-            {
-              inputs: [
-                {
-                  
-                  name: 'Mud',
-                  recipes: [
-                    { inputs: [{ name: 'Water' }, { name: 'Earth' }] },
-                  ],
-                },
-                { name: 'Sand' },
-              ],
-            },
-          ],
-        },
-        { name: 'Stone' },
-      ],
-    },
-    {
-      inputs: [
-        {
-          name: 'Mud',
-          recipes: [
-            { inputs: [{ name: 'Water' }, { name: 'Earth' }] },
-          ],
-        },
-        { name: 'Fire' },
-      ],
-    },
-  ],
-};
-
 function App() {
-  const [showTree, setShowTree] = useState(false);
+  const [treeData, setTreeData] = useState(null);
 
-  const handleSearch = params => {
-    // nanti di sini fetch dari backend
-    console.log('Search!', params);
-    setShowTree(true);
+  const handleSearch = async ({ selectedItem, algorithm, numRecipes }) => {
+    // Tentukan endpoint berdasarkan algoritma
+    const endpoint =
+      algorithm === 'dfs' ? '/api/dfs'
+    : algorithm === 'bfs' ? '/api/bfs'
+    :                       '/api/bidirectional';  // will return 501
+
+    const params = new URLSearchParams({
+      target: selectedItem.name,
+      count: numRecipes,
+    });
+
+    try {
+      const res = await fetch(`${endpoint}?${params}`, {
+        headers: { 'Accept': 'application/json' },
+      });
+      if (!res.ok) throw new Error(await res.text());
+      const dto = await res.json();
+      setTreeData(dto);
+    } catch (err) {
+      console.error('Fetch tree error:', err);
+      alert('Gagal mengambil data resep: ' + err.message);
+    }
   };
 
   return (
     <div className="App">
-      {!showTree && <SearchWindow onSearch={handleSearch} />}
-      {showTree && <RecipeTree data={sampleTreeData} />}
+      {!treeData ? (
+        <SearchWindow onSearch={handleSearch} />
+      ) : (
+        <RecipeTree data={treeData} />
+      )}
     </div>
   );
 }
