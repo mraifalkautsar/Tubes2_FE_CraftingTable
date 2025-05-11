@@ -4,19 +4,31 @@ import Tree from "react-d3-tree";
 import "./Tree.css";
 
 function convertDTO(node) {
+  // build your icon path
   const fileName = node.name.replace(/ /g, "_") + ".svg";
-  return {
+  const treeNode = {
     name: node.name,
     image: node.name ? `/images/${fileName}` : null,
-    children:
-      Array.isArray(node.recipes) && node.recipes.length
-        ? node.recipes.map((recipe) => ({
-            name: "",
-            image: null,
-            children: recipe.inputs.map(convertDTO),
-          }))
-        : undefined,
   };
+
+  // only if node.recipes is actually an array
+  if (Array.isArray(node.recipes)) {
+    // collect valid children groups
+    const childrenGroups = node.recipes.reduce((groups, recipe) => {
+      // guard recipe.inputs too
+      if (Array.isArray(recipe.inputs)) {
+        const inputs = recipe.inputs.map(convertDTO);
+        groups.push({ name: "", image: null, children: inputs });
+      }
+      return groups;
+    }, []);
+
+    if (childrenGroups.length > 0) {
+      treeNode.children = childrenGroups;
+    }
+  }
+
+  return treeNode;
 }
 
 export default function RecipeTree({
@@ -98,7 +110,6 @@ export default function RecipeTree({
         </div>
       )}
 
-
       {/* INFO BOX */}
       <div className="info-box">
         <h4>Search Info</h4>
@@ -115,7 +126,7 @@ export default function RecipeTree({
           <strong>Method used:</strong> {methodUsed}
         </p>
         <button className="back-button" onClick={onBack}>
-        ← New Search
+          ← New Search
         </button>
       </div>
     </div>

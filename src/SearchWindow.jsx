@@ -20,7 +20,7 @@ export default function SearchWindow({ onSearch }) {
         // data: [{ element, image_url, recipes }, ...]
         const mapped = data.map((el, idx) => {
           // build local path: spaces → underscores
-          const fileName = el.element.replace(/ /g, "_") + ".svg";
+          const fileName = el.element.replace(/ /g /*spasi*/, "_") + ".svg";
           return {
             id: idx,
             name: el.element,

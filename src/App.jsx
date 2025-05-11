@@ -48,33 +48,42 @@ function App() {
     methodUsed: "",
   });
 
+  const [loading, setLoading] = useState(false);
   const handleSearch = ({ selectedItem, algorithm, numRecipes }) => {
-    // ----- OLD fetch logic, now commented out -----
-    /*
-    const endpoint =
-      algorithm === 'dfs' ? '/api/dfs'
-      : algorithm === 'bfs' ? '/api/bfs'
-      :                       '/api/bidirectional';
+    setLoading(true);
+    // choose path segment based on algorithm
+    const path =
+      algorithm === "dfs"
+        ? "dfs"
+        : algorithm === "bfs"
+        ? "bfs"
+        : "bidirectional";
 
+    // build query string
     const params = new URLSearchParams({
       target: selectedItem.name,
       count: numRecipes,
     });
 
-    fetch(`${endpoint}?${params}`, { headers: { 'Accept': 'application/json' } })
-      .then(res => {
-        if (!res.ok) throw new Error(res.statusText)
-        return res.json()
+    // point directly at your Go server on :8080
+    fetch(`http://localhost:8080/api/${path}?${params}`, {
+      headers: { Accept: "application/json" },
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error(res.statusText);
+        return res.json();
       })
-      .then(dto => setTreeData(dto))
-      .catch(err => {
-        console.error('Fetch tree error:', err)
-        alert('Gagal mengambil data resep: ' + err.message)
+      .then((dto) => {
+        console.log("🔍 API response:", dto);
+        setTreeData(dto);
       })
-    */
-
-    // ----- NEW test version: always show sampleTreeData -----
-    setTreeData(sampleTreeData);
+      .catch((err) => {
+        console.error("Fetch tree error:", err);
+        alert("Gagal mengambil data resep: " + err.message);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
@@ -87,6 +96,12 @@ function App() {
           {...metrics}
           onBack={() => setTreeData(null)}
         />
+      )}
+      {/* loading overlay always rendered last so it sits on top */}
+      {loading && (
+        <div className="loading-overlay">
+          <p>Loading recipes…</p>
+        </div>
       )}
     </div>
   );
