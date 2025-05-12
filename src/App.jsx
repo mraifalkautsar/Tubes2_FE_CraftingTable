@@ -30,6 +30,8 @@ function App() {
       count: numRecipes,
     });
 
+    console.log("VITE_API_BASE_URL:", import.meta.env.VITE_API_BASE_URL);
+
     // point directly at your Go server on :8080
     fetch(`${import.meta.env.VITE_API_BASE_URL}/api/${path}?${params}`, {
       headers: { Accept: "application/json" },
