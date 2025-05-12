@@ -168,3 +168,8 @@
   font-size: 1.25rem;
   pointer-events: none; /* allow clicks through to underlying buttons */
 }
+
+.site-logo > img {
+  max-width: 200px;
+  opacity: 0.5;
+}
