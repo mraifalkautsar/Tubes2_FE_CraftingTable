@@ -11,8 +11,8 @@ export default function SearchWindow({ onSearch }) {
 
   useEffect(() => {
     // ambil daftar elemen + image_url dari backend
-    console.log("VITE_API_BASE_URL:", );
-    fetch("https://tubes2_be_craftingtable.railway.internal:8080/api/recipes")
+    console.log("VITE_API_BASE_URL:", process.env.VITE_API_BASE_URL);
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/api/recipes`)
       .then((res) => {
         if (!res.ok) throw new Error(res.statusText);
         return res.json();
