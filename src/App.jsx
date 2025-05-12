@@ -44,7 +44,7 @@ function App() {
       stream: liveUpdate ? "1" : "0",
     });
 
-    const url = `http://localhost:8080/api/${path}?${params}`;
+    const url = `${import.meta.env.VITE_API_BASE_URL}/api/${path}?${params}`;
 
     if (liveUpdate) {
       // SSE mode
