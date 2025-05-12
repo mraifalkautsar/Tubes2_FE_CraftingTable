@@ -4,41 +4,6 @@ import React, { useState } from "react";
 import SearchWindow from "./SearchWindow.jsx";
 import RecipeTree from "./Tree.jsx";
 
-// your sample data, exactly as you pasted
-const sampleTreeData = {
-  name: "Brick",
-  recipes: [
-    {
-      inputs: [
-        {
-          name: "Clay",
-          recipes: [
-            {
-              inputs: [
-                {
-                  name: "Mud",
-                  recipes: [{ inputs: [{ name: "Water" }, { name: "Earth" }] }],
-                },
-                { name: "Sand" },
-              ],
-            },
-          ],
-        },
-        { name: "Stone" },
-      ],
-    },
-    {
-      inputs: [
-        {
-          name: "Mud",
-          recipes: [{ inputs: [{ name: "Water" }, { name: "Earth" }] }],
-        },
-        { name: "Fire" },
-      ],
-    },
-  ],
-};
-
 function App() {
   const [treeData, setTreeData] = useState(null);
   const [metrics, setMetrics] = useState({
@@ -73,9 +38,16 @@ function App() {
         if (!res.ok) throw new Error(res.statusText);
         return res.json();
       })
-      .then((dto) => {
-        console.log("🔍 API response:", dto);
-        setTreeData(dto);
+      .then((json) => {
+        console.log("🔍 API response:", json);
+        // pull out the tree and the metrics
+        setTreeData(json.tree);
+        setMetrics({
+          timeTaken:    json.timeTaken,
+          nodesVisited: json.nodesVisited,
+          recipesFound: json.recipesFound,
+          methodUsed:   json.methodUsed,
+        });
       })
       .catch((err) => {
         console.error("Fetch tree error:", err);

@@ -114,7 +114,7 @@ export default function RecipeTree({
       <div className="info-box">
         <h4>Search Info</h4>
         <p>
-          <strong>Time taken:</strong> {timeTaken} ms
+          <strong>Time taken:</strong> {(timeTaken / 1000).toFixed(3)} ms
         </p>
         <p>
           <strong>Nodes visited:</strong> {nodesVisited}

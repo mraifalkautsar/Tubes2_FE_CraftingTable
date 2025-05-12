@@ -83,10 +83,11 @@ export default function SearchWindow({ onSearch }) {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
+          <br/>
 
           {/* preview */}
           <div className="selected-preview">
-            <span className="label">Selected</span>
+            <span className="label"><u>Selected</u></span>
             <div className="preview-box">
               <img src={selectedItem.icon} alt={selectedItem.name} />
             </div>
