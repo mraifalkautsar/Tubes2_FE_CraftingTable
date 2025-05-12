@@ -31,7 +31,7 @@ function App() {
     });
 
     // point directly at your Go server on :8080
-    fetch(`http://localhost:8080/api/${path}?${params}`, {
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/api/${path}?${params}`, {
       headers: { Accept: "application/json" },
     })
       .then((res) => {
@@ -71,7 +71,7 @@ function App() {
       )}
       {/* loading overlay always rendered last so it sits on top */}
       {loading && (
-        <div className="loading-overlay">
+        <div className="overlay">
           <p>Loading recipes…</p>
         </div>
       )}

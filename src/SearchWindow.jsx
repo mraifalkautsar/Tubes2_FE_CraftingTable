@@ -11,7 +11,7 @@ export default function SearchWindow({ onSearch }) {
 
   useEffect(() => {
     // ambil daftar elemen + image_url dari backend
-    fetch("http://localhost:8080/api/recipes")
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/api/recipes`)
       .then((res) => {
         if (!res.ok) throw new Error(res.statusText);
         return res.json();
@@ -38,7 +38,7 @@ export default function SearchWindow({ onSearch }) {
 
   if (!items)
     return (
-      <div className="overlay">
+      <div className="loading-overlay">
         <p>Loading elements…</p>
       </div>
     );
