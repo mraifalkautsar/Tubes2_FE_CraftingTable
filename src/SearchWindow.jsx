@@ -8,6 +8,7 @@ export default function SearchWindow({ onSearch }) {
   const [algorithm, setAlgorithm] = useState("dfs");
   const [numRecipes, setNumRecipes] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+  const [liveUpdate, setLiveUpdate] = useState(false);
 
   useEffect(() => {
     // ambil daftar elemen + image_url dari backend
@@ -49,7 +50,7 @@ export default function SearchWindow({ onSearch }) {
   );
 
   const handleSearch = () => {
-    onSearch({ selectedItem, algorithm, numRecipes: Number(numRecipes) });
+    onSearch({ selectedItem, algorithm, numRecipes: Number(numRecipes), liveUpdate });
   };
 
   return (
@@ -83,9 +84,9 @@ export default function SearchWindow({ onSearch }) {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
-          </div>
-          <br/>
+          </div>      
 
+          <br/>
           {/* preview */}
           <div className="selected-preview">
             <span className="label"><u>Selected</u></span>
@@ -116,16 +117,16 @@ export default function SearchWindow({ onSearch }) {
               />
               BFS
             </label>
+            <div className="live-update-toggle">
             <label>
-              <input
-                type="radio"
-                name="algorithm"
-                value="bidirectional"
-                checked={algorithm === "bidirectional"}
-                onChange={() => setAlgorithm("bidirectional")}
-              />
-              Bidirectional
+             <input
+               type="checkbox"
+               checked={liveUpdate}
+               onChange={(e) => setLiveUpdate(e.target.checked)}
+             />{" "}
+             Live Update
             </label>
+            </div>
           </div>
           {/* banyak resep */}
           <div className="recipes-input">

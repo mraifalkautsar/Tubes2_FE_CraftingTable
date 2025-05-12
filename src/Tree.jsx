@@ -102,7 +102,6 @@ export default function RecipeTree({
             enableLegacyTransitions={false}
             zoomable={true}
             zoom={1}
-            scaleExtent={{ min: 0.5, max: 2 }}
             separation={{ siblings: 1.5, nonSiblings: 2 }}
             rootOrientation="bottom"
             /* no inline styles here! */
