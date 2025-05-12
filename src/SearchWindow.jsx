@@ -11,7 +11,7 @@ export default function SearchWindow({ onSearch }) {
 
   useEffect(() => {
     // ambil daftar elemen + image_url dari backend
-    console.log("VITE_API_BASE_URL:", process.env.VITE_API_BASE_URL);
+    console.log("VITE_API_BASE_URL:", import.meta.env.VITE_API_BASE_URL);
     fetch(`${import.meta.env.VITE_API_BASE_URL}/api/recipes`)
       .then((res) => {
         if (!res.ok) throw new Error(res.statusText);
