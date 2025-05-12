@@ -56,7 +56,6 @@ export default function SearchWindow({ onSearch }) {
   return (
     <div className="overlay">
       <div className="modal">
-        {/* kiri: grid ikon */}
         <div className="grid-wrapper">
           <div className="grid">
             {filtered.map((item) => (
@@ -75,7 +74,6 @@ export default function SearchWindow({ onSearch }) {
             )}
           </div>
         </div>
-        {/* kanan: kontrol */}
         <div className="controls">
           <div className="search-bar">
             <input
@@ -87,7 +85,6 @@ export default function SearchWindow({ onSearch }) {
           </div>      
 
           <br/>
-          {/* preview */}
           <div className="selected-preview">
             <span className="label"><u>Selected</u></span>
             <div className="preview-box">
@@ -95,7 +92,6 @@ export default function SearchWindow({ onSearch }) {
             </div>
             <div className="item-name">{selectedItem.name}</div>
           </div>
-          {/* algoritma */}
           <div className="radio-group">
             <label>
               <input
@@ -128,7 +124,6 @@ export default function SearchWindow({ onSearch }) {
             </label>
             </div>
           </div>
-          {/* banyak resep */}
           <div className="recipes-input">
             <label>Number of Recipes</label>
             <input

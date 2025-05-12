@@ -1,21 +1,16 @@
-// src/Tree.jsx
 import React, { useMemo, useRef, useState, useLayoutEffect } from "react";
 import Tree from "react-d3-tree";
 import "./Tree.css";
 
 function convertDTO(node) {
-  // build your icon path
   const fileName = node.name.replace(/ /g, "_") + ".svg";
   const treeNode = {
     name: node.name,
     image: node.name ? `/images/${fileName}` : null,
   };
 
-  // only if node.recipes is actually an array
   if (Array.isArray(node.recipes)) {
-    // collect valid children groups
     const childrenGroups = node.recipes.reduce((groups, recipe) => {
-      // guard recipe.inputs too
       if (Array.isArray(recipe.inputs)) {
         const inputs = recipe.inputs.map(convertDTO);
         groups.push({ name: "", image: null, children: inputs });
@@ -61,22 +56,18 @@ export default function RecipeTree({
 
     return (
       <g className={cls} transform={transform}>
-        {/* icon */}
         {!isDummy && nodeDatum.image && (
           <image className="node-icon" href={nodeDatum.image} />
         )}
-        {/* circle; CSS will size & color it */}
-        {/* square; CSS will size & color it */}
         {!isDummy && (
           <rect
             className="node-rect"
-            x={-26} /* half of width */
-            y={-26} /* half of height */
+            x={-26}
+            y={-26}
             width={52}
             height={52}
           />
         )}
-        {/* label */}
         {!isDummy && <text className="node-label">{nodeDatum.name}</text>}
       </g>
     );
@@ -89,7 +80,7 @@ export default function RecipeTree({
           style={{
             width: "100%",
             height: "100%",
-            transform: "rotate(180deg)", // flip the whole tree
+            transform: "rotate(180deg)",
           }}
         >
           <Tree
@@ -104,12 +95,10 @@ export default function RecipeTree({
             zoom={1}
             separation={{ siblings: 1.5, nonSiblings: 2 }}
             rootOrientation="bottom"
-            /* no inline styles here! */
           />
         </div>
       )}
 
-      {/* INFO BOX */}
       <div className="info-box">
         <h4>Search Info</h4>
         <p>

@@ -1,5 +1,4 @@
-// src/App.jsx
-import React, { useState, useRef } from "react";   // ← import useRef!
+import React, { useState, useRef } from "react";
 import SearchWindow from "./SearchWindow.jsx";
 import RecipeTree   from "./Tree.jsx";
 
@@ -25,7 +24,6 @@ function App() {
     setUseLiveUpdate(liveUpdate);
     setLoading(true);
 
-    // close any existing SSE
     if (sourceRef.current) {
       sourceRef.current.close();
       sourceRef.current = null;
@@ -47,7 +45,6 @@ function App() {
     const url = `${import.meta.env.VITE_API_BASE_URL}/api/${path}?${params}`;
 
     if (liveUpdate) {
-      // SSE mode
       const es = new EventSource(url);
       sourceRef.current = es;
 
@@ -63,7 +60,6 @@ function App() {
         es.close();
       };
     } else {
-      // one-shot fetch
       fetch(url, { headers: { Accept: "application/json" } })
         .then((res) => {
           if (!res.ok) throw new Error(res.statusText);
@@ -81,7 +77,7 @@ function App() {
           setLoading(false);
         });
     }
-  };  // ← closes handleSearch
+  };
 
   const handleBack = () => {
     if (sourceRef.current) {
