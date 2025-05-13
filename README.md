@@ -22,7 +22,7 @@ Kemudian, install dependensi Node.js dengan menjalankan:
 Setelah berhasil menginstall dependdensi, jalankan program dengan menjalankan perintah: 
 
 ```bash
-npm run install 
+npm run dev 
 ```
 
 Perintah ini akan memberikan link local menuju website yaitu:
