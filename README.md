@@ -2,6 +2,8 @@
 
 **CraftingTable** adalah sebuah program pencarian pohon resep untuk permainan Little Alchemy 2 menggunakan algoritma Depth-first Search dan Breadth-first Search dalam struktur data pohon. Program ini dirancang untuk membuat pohon resep yang berisikan sejumlah cara untuk membuat sebuah elemen dari permainan, dimulai dari elemen-elemen dasar. Program ini dibuat untuk memenuhi Tugas Besar 2 mata kuliah Strategi Algoritma (IF2211).
 
+Link Backend: https://github.com/Henshou/Tubes2_BE_CraftingTable
+
 ## Requirement dan Instalasi  
 Program ini berjalan dengan bahasa pemrograman Javascript dengan framework Vite + React.
 
